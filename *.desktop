@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Eclipse
+Type=Application
+Exec=/home/knufle/eclipse/java-latest-released/eclipse/eclipse
+Terminal=false
+Icon=/home/knufle/eclipse/java-latest-released/eclipse/icon.xpm
+Comment=Integrated Development Environment
+NoDisplay=false
+Categories=Development;IDE;
+Name[en]=Eclipse
