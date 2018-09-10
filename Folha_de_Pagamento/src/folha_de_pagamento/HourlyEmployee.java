@@ -45,7 +45,25 @@ public class HourlyEmployee extends Employee{
 	
 	// return hours worked
 	public double getHours() {return hours;}
-
+	
+	// calcula earnings; sobrescreve o metodo abstrato earnings em Employee
+	@Override
+	public double earnings() {
+		if (getHours() <= 40) { // sem overtime
+			return getWage() * getHours();
+		}
+		else {
+			return 40 * getWage() + (getHours() - 40) * getWage() * 1.5;
+		}
+	}
+	
+	// retorna representacao em String do objeto HourlyEmployee
+	@Override
+	public String toString() {
+		return String.format("hourly employee: %s%n%s: $%,.2f; %s: %,.2f",
+				super.toString(),"hourly wage", getWage(),
+				"hours worked", getHours());
+	}
 }
 
 
