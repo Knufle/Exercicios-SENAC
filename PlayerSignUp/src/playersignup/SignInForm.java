@@ -5,7 +5,13 @@
  */
 package playersignup;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,12 +45,14 @@ public class SignInForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
         jPasswordField1 = new javax.swing.JPasswordField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        jButton_LOGAR = new javax.swing.JButton();
+        jButton_CANCELAR = new javax.swing.JButton();
         jLabelRegister = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
+        setPreferredSize(new java.awt.Dimension(955, 600));
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(35, 54, 86));
 
@@ -97,21 +105,21 @@ public class SignInForm extends javax.swing.JFrame {
         jPasswordField1.setFont(new java.awt.Font("Dialog", 0, 16)); // NOI18N
         jPasswordField1.setForeground(new java.awt.Color(35, 54, 86));
 
-        jButton1.setFont(new java.awt.Font("Liberation Mono", 1, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(35, 54, 86));
-        jButton1.setText("Login");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        jButton_LOGAR.setFont(new java.awt.Font("Liberation Mono", 1, 18)); // NOI18N
+        jButton_LOGAR.setForeground(new java.awt.Color(35, 54, 86));
+        jButton_LOGAR.setText("Login");
+        jButton_LOGAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                jButton_LOGARActionPerformed(evt);
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Liberation Mono", 1, 18)); // NOI18N
-        jButton2.setForeground(new java.awt.Color(35, 54, 86));
-        jButton2.setText("Cancelar");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        jButton_CANCELAR.setFont(new java.awt.Font("Liberation Mono", 1, 18)); // NOI18N
+        jButton_CANCELAR.setForeground(new java.awt.Color(35, 54, 86));
+        jButton_CANCELAR.setText("Cancelar");
+        jButton_CANCELAR.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                jButton_CANCELARActionPerformed(evt);
             }
         });
 
@@ -152,9 +160,9 @@ public class SignInForm extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLabelRegister)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton_CANCELAR, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButton_LOGAR, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -179,8 +187,8 @@ public class SignInForm extends javax.swing.JFrame {
                     .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 303, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_LOGAR, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton_CANCELAR, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelRegister))
                 .addContainerGap())
         );
@@ -211,13 +219,42 @@ public class SignInForm extends javax.swing.JFrame {
         this.setState(JFrame.ICONIFIED);
     }//GEN-LAST:event_jButtonMinMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void jButton_LOGARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_LOGARActionPerformed
+        PreparedStatement ps;
+        ResultSet rs;
+        String usuario = jTextField2.getText();
+        String senha = String.valueOf(jPasswordField1.getPassword());
+        
+        String query = "SELECT * FROM `TB_PLAYERS` WHERE `DS_USERNAME` =? AND `DS_SENHA` =?";
+        
+        try {
+            ps = ConexaoBD.getConnection().prepareStatement(query);
+            
+            ps.setString(1, usuario);
+            ps.setString(2, senha);
+            
+            rs = ps.executeQuery();
+            
+            if(rs.next()){
+                
+                P_Inicial mf = new P_Inicial();
+                mf.setVisible(true);
+                mf.pack();
+                mf.setLocationRelativeTo(null);
+                mf.jLabel2PInicial.setText("Bem Vindo "+usuario);
+                
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Usuario ou senha incorreto");
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(SignInForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton_LOGARActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    private void jButton_CANCELARActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_CANCELARActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_jButton_CANCELARActionPerformed
 
     private void jLabelRegisterMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabelRegisterMouseClicked
         SignUpForm rgf = new SignUpForm();
@@ -279,10 +316,10 @@ public class SignInForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButtonClose;
     private javax.swing.JButton jButtonMin;
+    private javax.swing.JButton jButton_CANCELAR;
+    private javax.swing.JButton jButton_LOGAR;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -13,7 +13,7 @@ public class ConexaoBD {
         Connection con = null;
         try {
         
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost/PlayerSignUp", "root", "");
             
         } catch (Exception ex) {
