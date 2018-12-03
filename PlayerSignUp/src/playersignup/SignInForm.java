@@ -51,7 +51,6 @@ public class SignInForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
-        setPreferredSize(new java.awt.Dimension(955, 600));
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(35, 54, 86));
